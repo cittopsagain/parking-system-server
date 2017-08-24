@@ -5,56 +5,34 @@
  */
 
 include 'includes/includes.php';
+include 'views/header.php';
 
-$task = $_REQUEST['task'];
+$task = $encryption->decrypt(isset($_GET['task']) ? $_GET['task'] : "");
 
 switch($task) {
     case 'login':
-        $username = $_POST['username'];
-        $password = $_POST['password'];
-
-        $result = $loginModel->isUserExist($username, $password);
-        $exist = FALSE;
-        if (!empty($result)) {
-            $exist = TRUE;
-            $fname = $result[0]->first_name;
-            $lname = $result[0]->last_name;
-            $img_path = $result[0]->img_path;
+        $loginModel = new LoginModel();
+        $data = array("username" => $_POST['username'], "password" => $_POST['password']);
+        $doLogin = $loginModel->adminRequestLogin($data);
+        if ($doLogin['exist']) {
+            $session->set('username', $data['username']);
+            $session->set('fname', $doLogin['fname']);
+            include 'views/dashboard.php';
+        } else {
+            $session->set('error', true);
+            include 'views/login.php';
         }
-        $response = array('exist' => $exist, 'fname' => isset($fname) ? $fname : "", 'lname' => isset($lname) ? $lname : "", 'img_path' => isset($img_path) ? $img_path : "");
-        echo json_encode($response);
     break;
 
-    case 'getParkingHistory':
-        $results = $parkingModel->getParkingHistory();
-        $data = array();
-        for ($i = 0; $i < count($results); $i++) {
-            $data[] = $results;
-        }
-        echo json_encode($data);
-    break;
-
-    case 'getViolations':
-        $results = $parkingModel->getViolations();
-        echo json_encode($results);
-    break;
-
-    case 'getParkingSlots':
-        $what_parking_area = $_POST['whatParkingArea'];
-        $results = $parkingModel->getParkingSlots($what_parking_area);
-        echo json_encode(array("available_slots" => $results[0]->available_slots));
-    break;
-
-    case 'updateParkingAreaSlot':
-        $what_parking_area = $_POST['whatParkingArea'];
-        $slot = $_POST['slot'];
-        $result = $parkingModel->updateParkingAreaSlot($what_parking_area, $slot);
-        $response = array("result" => $result ? TRUE : FALSE);
-        echo json_encode($response);
+    case 'logout':
+        echo "Here";
     break;
 
     default:
+        include 'views/login.php';
     break;
 }
+
+include 'views/footer.php';
 
 ?>
