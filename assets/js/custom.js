@@ -1,3 +1,6 @@
+window.onload = function() {
+    setInterval(viewAcademicArea, 5000);
+}
 function viewAcademicArea() {
     document.getElementById("parking-area").style.display = 'none';
     var formData = new FormData();
@@ -37,7 +40,7 @@ function viewAcademicArea() {
                     ctx.fill();
                 }
             };
-            image.src = '/cit_parking_system/images/map/academic_area_top_view.png';
+            image.src = '/cit_parking_system/images/map/hdpi/ic_academic_area_2d.png';
         } else {
             alert('An error occurred!');
         }

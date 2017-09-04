@@ -13,13 +13,13 @@ class ParkingModel extends Database {
     }
 
     public function getViolations() {
-        $sql = sprintf("SELECT * FROM %s", 'violations');
+        $sql = sprintf("SELECT * FROM %s ORDER BY violation_date DESC", 'violations');
         $this->db->setSQL($sql);
         return $this->db->getQueryResult();
     }
 
     public function getParkingHistory() {
-        $sql = sprintf("SELECT * FROM %s", 'parking_history');
+        $sql = sprintf("SELECT * FROM %s ORDER BY date_time_park DESC", 'parking_history');
         $this->db->setSQL($sql);
         return $this->db->getQueryResult();
     }
@@ -46,9 +46,9 @@ class ParkingModel extends Database {
         return $result ? TRUE : FALSE;
     }
 
-    public function addViolation($what_parking_area, $plate_num, $violationType) {
+    public function addViolation($what_parking_area, $plate_num, $violation_type) {
         $sql = sprintf("INSERT INTO %s (plate_number, violation_type, area, violation_date) VALUES ('%s', '%s', '%s', NOW())",
-                        'violations', $plate_num, $violationType, $what_parking_area
+                        'violations', $this->db->escapeSpecialChars($plate_num), $this->db->escapeSpecialChars($violation_type), $what_parking_area
                     );
         $this->db->setSQL($sql);
         $result = $this->db->executeSQLStmt();

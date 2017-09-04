@@ -11,7 +11,7 @@ if ($error) {
     $errorTxt = "Invalid username or password.";
 }
 ?>
-<body class=" login">
+<body class=" login" style="background-color: #800000;">
     <!-- BEGIN LOGO -->
     <div class="logo">
          <span class="form-title"> CIT-U PARKING SYSTEM </span>
@@ -32,12 +32,12 @@ if ($error) {
             <div class="form-group">
                 <!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
                 <label class="control-label visible-ie8 visible-ie9">Username</label>
-                <input class="form-control form-control-solid placeholder-no-fix" type="text" autocomplete="off" placeholder="Username" name="username" /> </div>
+                <input class="form-control form-control-solid placeholder-no-fix" type="text" style="background-color: #ffffff;" autocomplete="off" placeholder="Username" name="username" /> </div>
             <div class="form-group">
                 <label class="control-label visible-ie8 visible-ie9">Password</label>
-                <input class="form-control form-control-solid placeholder-no-fix" type="password" autocomplete="off" placeholder="Password" name="password" /> </div>
+                <input class="form-control form-control-solid placeholder-no-fix" style="background-color: #ffffff; text-color: #ffffff;" type="password" autocomplete="off" placeholder="Password" name="password" /> </div>
             <div class="form-actions">
-                <button type="submit" class="btn red btn-block uppercase">Login</button>
+                <button type="submit" class="btn red btn-block uppercase" style="background-color: #FFD700;">Login</button>
             </div>
         </form>
     </div>

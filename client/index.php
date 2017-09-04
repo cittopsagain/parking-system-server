@@ -64,10 +64,14 @@ switch($task) {
     case 'addViolation':
         $what_parking_area = $_POST['whatParkingArea'];
         $plate_num = ucfirst($_POST['plateNumber']);
-        $violationType = ucfirst($_POST['violationType']);
-        $result = $parkingModel->addViolation($what_parking_area, $plate_num, $violationType);
+        $violation_type = ucfirst($_POST['violationType']);
+        $result = $parkingModel->addViolation($what_parking_area, $plate_num, $violation_type);
         $response = array("sucess" => $result ? TRUE : FALSE);
         echo json_encode($response);
+    break;
+
+    case 'connect':
+        echo json_encode(array('success' => TRUE));
     break;
 
     default:

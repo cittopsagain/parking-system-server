@@ -205,7 +205,7 @@
                         </div>
                         <div class="row">
                             <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                                <canvas id="parking-area-canvas" width="600" height="600">
+                                <canvas id="parking-area-canvas" width="900" height="1000">
                             </div>
                         </div>
                         <div class="clearfix"></div>
