@@ -15,6 +15,12 @@
         <script src="assets/js/jquery.validate.min.js" type="text/javascript"></script>
         <script src="assets/js/additional-methods.min.js" type="text/javascript"></script>
         <script src="assets/js/select2.full.min.js" type="text/javascript"></script>
+		
+		<!--<script src="assets/js/datatable.js" type="text/javascript"></script>
+		<script src="assets/js/datatables.min.js" type="text/javascript" />
+        <script src="assets/js/table-datatables-managed.min.js" type="text/javascript"></script>
+		<script src="assets/js/plugins/bootstrap/datatables.bootstrap.js" type="text/javascript" />-->
+		
         <!-- END PAGE LEVEL PLUGINS -->
         <!-- BEGIN THEME GLOBAL SCRIPTS -->
         <script src="assets/js/app.min.js" type="text/javascript"></script>

@@ -7,25 +7,30 @@
 include 'includes/includes.php';
 include 'views/header.php';
 
-$task = $encryption->decrypt(isset($_GET['task']) ? $_GET['task'] : "");
+$task = isset($_GET['task']) ? $_GET['task'] : "";
 
 switch($task) {
-    case 'login':
-        $loginModel = new LoginModel();
-        $data = array("username" => $_POST['username'], "password" => $_POST['password']);
-        $doLogin = $loginModel->adminRequestLogin($data);
-        if ($doLogin['exist']) {
-            $session->set('username', $data['username']);
-            $session->set('fname', $doLogin['fname']);
-            include 'views/dashboard.php';
-        } else {
-            $session->set('error', true);
-            include 'views/login.php';
-        }
+    case 'dashboard':
+        if (!empty($_GET['redirect'])) {
+			include 'views/dashboard.php';
+		} else {
+			if (!empty($session->get('username'))) {
+				include 'views/dashboard.php';
+			} else {
+				$data = array("username" => $_POST['username'], "password" => $_POST['password']);
+				$do_login = $loginModel->adminRequestLogin($data);
+				if ($do_login['exist']) {
+					$session->set('username', $data['username']);
+					$session->set('fname', $do_login['fname']);
+					include 'views/dashboard.php';
+				}
+			}
+		}
     break;
-
+	
     case 'logout':
-        echo "Here";
+        $session->forget();
+        $loginModel->redirect('?');
     break;
 
     default:

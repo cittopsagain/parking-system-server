@@ -69,6 +69,16 @@ switch($task) {
         $response = array("sucess" => $result ? TRUE : FALSE);
         echo json_encode($response);
     break;
+	
+	case 'updateViolation':
+		$what_parking_area = $_POST['area'];
+        $plate_num = ucfirst($_POST['plateNumber']);
+        $violation_type = ucfirst($_POST['violation']);
+        $id = $_POST['id'];
+		$result = $parkingModel->updateViolation($id, $plate_num, $violation_type, $what_parking_area);
+        $response = array("sucess" => $result ? TRUE : FALSE);
+        echo json_encode($response);
+	break;
 
     case 'connect':
         echo json_encode(array('success' => TRUE));

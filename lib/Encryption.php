@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * Created by Dave Tolentin on 7/16/2017.
+ */
+
 class Encryption {
 
     private $key = "";

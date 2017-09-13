@@ -8,9 +8,9 @@
                     <div class="page-logo">
                         <!-- <a href="index.html">
                              <img src="../assets/layouts/layout/img/logo.png" alt="logo" class="logo-default" /> </a> -->
-                        <div class="menu-toggler sidebar-toggler">
+                        <!-- <div class="menu-toggler sidebar-toggler">
                             <span></span>
-                        </div>
+                        </div> -->
                     </div>
                     <!-- END LOGO -->
                     <!-- BEGIN RESPONSIVE MENU TOGGLER -->
@@ -44,12 +44,12 @@
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-default">
                                     <li>
-                                        <a href="page_user_profile_1.html">
+                                        <a href="javascript:void(0);">
                                             <i class="icon-user"></i> My Profile </a>
                                     </li>
                                     
                                     <li>
-                                        <a href="<?php echo "?task=".$encryption->encrypt('logout'); ?>">
+                                        <a href="<?php echo "?task=logout"; ?>">
                                             <i class="icon-key"></i> Log Out </a>
                                     </li>
                                 </ul>
@@ -96,7 +96,7 @@
                             <!-- DOC: To remove the search box from the sidebar you just need to completely remove the below "sidebar-search-wrapper" LI element -->
                            
                             <li class="nav-item start active open">
-                                <a href="javascript:;" class="nav-link nav-toggle">
+                                <a href="javascript:void(0);" onclick="dashboard();" class="nav-link nav-toggle">
                                     <i class="icon-home"></i>
                                     <span class="title">Dashboard</span>
                                     <span class="selected"></span>
@@ -104,24 +104,43 @@
                                 </a>
                                 <ul class="sub-menu">
                                     <li class="nav-item start active open">
-                                        <a href="index.html" class="nav-link ">
-                                            <i class="icon-bar-chart"></i>
-                                            <span class="title">Parking 1</span>
-                                            <span class="selected"></span>
+                                        <a href="javascript:void(0);" onclick="viewHsArea('Highschool Area');" class="nav-link ">
+                                            <span class="title">High School Area</span>
+                                            <span id="high_school_badge" class="badge badge-success"></span>
                                         </a>
                                     </li>
                                     <li class="nav-item start ">
-                                        <a href="dashboard_2.html" class="nav-link ">
-                                            <i class="icon-bulb"></i>
-                                            <span class="title">Parking 2</span>
-                                            <span class="badge badge-success">1</span>
+                                        <a href="javascript:void(0);" class="nav-link ">
+                                            <span class="title">Academic Area</span>
+                                            <span class="badge badge-success">9/70</span>
                                         </a>
                                     </li>
                                     <li class="nav-item start ">
-                                        <a href="dashboard_3.html" class="nav-link ">
-                                            <i class="icon-graph"></i>
-                                            <span class="title">Parking 3</span>
-                                            <span class="badge badge-danger">5</span>
+                                        <a href="javascript:void(0);" class="nav-link ">
+                                            <span class="title">ST Building Area</span>
+                                            <span class="badge badge-danger">0/50</span>
+                                        </a>
+                                    </li>
+									<li class="nav-item start ">
+                                        <a href="javascript:void(0);" class="nav-link ">
+                                            <span class="title">Backgate Area</span>
+                                            <span class="badge badge-success">2/89</span>
+                                        </a>
+                                    </li>
+									<li class="nav-item start ">
+                                        <a href="javascript:void(0);" class="nav-link ">
+                                            <span class="title">Canteen Area</span>
+                                            <span class="badge badge-danger">0/87</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="javascript:void(0);" onclick="getParkingHistory();" class="nav-link ">
+                                            <span class="title">Parking History</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="javascript:void(0);" onclick="getViolations();" class="nav-link ">
+                                            <span class="title">Violations</span>
                                         </a>
                                     </li>
                                 </ul>
@@ -134,7 +153,7 @@
                 </div>
                 <!-- END SIDEBAR -->
                 <!-- BEGIN CONTENT -->
-                <div class="page-content-wrapper">
+                <div id="dashboard_container" class="page-content-wrapper">
                     <!-- BEGIN CONTENT BODY -->
                     <div class="page-content">
                         <!-- BEGIN PAGE HEADER-->
@@ -145,23 +164,23 @@
                         
                         <!-- END PAGE BAR -->
                         <!-- BEGIN PAGE TITLE-->
-                        <h1 class="page-title"> Dashboard
+                        <h1 id="dashboard" class="page-title"> Dashboard
                             
                         </h1>
                         <!-- END PAGE TITLE-->
                         <!-- END PAGE HEADER-->
                         <!-- BEGIN DASHBOARD STATS 1-->
-                        <div class="row" id="parking-area">
+						<div class="row" id="parking-area">
                             <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                                <a class="dashboard-stat dashboard-stat-v2 blue" href="javascript:void(0);" onclick="viewAcademicArea();">
+                                <a class="dashboard-stat dashboard-stat-v2 blue" href="javascript:void(0);" onclick="viewHsArea('Highschool Area');">
                                     <div class="visual">
                                         <i class="fa fa-comments"></i>
                                     </div>
                                     <div class="details">
                                         <div class="number">
-                                            <span data-counter="counterup" data-value="1349">0</span>
+                                            <span id="high_school_badge_board" data-counter="counterup" data-value="1349">0</span>
                                         </div>
-                                        <div class="desc"> Academic Area </div>
+                                        <div class="desc"> High School Area </div>
                                     </div>
                                 </a>
                             </div>
@@ -173,7 +192,7 @@
                                     <div class="details">
                                         <div class="number">
                                             <span data-counter="counterup" data-value="12,5">0</span> </div>
-                                        <div class="desc"> Area 1 </div>
+                                        <div class="desc"> Academic Area </div>
                                     </div>
                                 </a>
                             </div>
@@ -186,7 +205,7 @@
                                         <div class="number">
                                             <span data-counter="counterup" data-value="549">0</span>
                                         </div>
-                                        <div class="desc"> Area 2 </div>
+                                        <div class="desc"> ST Building Area </div>
                                     </div>
                                 </a>
                             </div>
@@ -198,14 +217,26 @@
                                     <div class="details">
                                         <div class="number">
                                             <span data-counter="counterup" data-value="89">0</span></div>
-                                        <div class="desc"> Area 3 </div>
+                                        <div class="desc"> Backgate Area </div>
+                                    </div>
+                                </a>
+                            </div>
+							<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                <a class="dashboard-stat dashboard-stat-v2 purple" href="#">
+                                    <div class="visual">
+                                        <i class="fa fa-globe"></i>
+                                    </div>
+                                    <div class="details">
+                                        <div class="number">
+                                            <span data-counter="counterup" data-value="89">0</span></div>
+                                        <div class="desc"> Canteen Area </div>
                                     </div>
                                 </a>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                                <canvas id="parking-area-canvas" width="900" height="1000">
+                            <div id="parking-area-holder-canvas" class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                <canvas id="parking-area-canvas" width="1000" height="690">
                             </div>
                         </div>
                         <div class="clearfix"></div>
@@ -223,7 +254,7 @@
             <!-- END CONTAINER -->
             <!-- BEGIN FOOTER -->
             <div class="page-footer">
-                <div class="page-footer-inner"> 2016 &copy; CIT-U Parking System
+                <div class="page-footer-inner"> 2017 &copy; CIT-U Parking System
                     
                 </div>
                 <div class="scroll-to-top">

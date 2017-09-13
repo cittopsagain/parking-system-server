@@ -7,7 +7,8 @@
         <meta content="width=device-width, initial-scale=1" name="viewport" />
         <meta content="" name="description" />
         <meta content="" name="author" />
-        <!-- BEGIN GLOBAL MANDATORY STYLES -->
+        <link rel="shortcut icon" href="/cit_parking_system/images/ic_launcher_parking.png" type="image/png">
+		<!-- BEGIN GLOBAL MANDATORY STYLES -->
         <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=all" rel="stylesheet" type="text/css" />
         <link href="assets/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
         <link href="assets/css/simple-line-icons.min.css" rel="stylesheet" type="text/css" />
@@ -20,6 +21,9 @@
         <link href="assets/css/fullcalendar.min.css" rel="stylesheet" type="text/css" />
         <link href="assets/css/select2.min.css" rel="stylesheet" type="text/css" />
         <link href="assets/css/select2-bootstrap.min.css" rel="stylesheet" type="text/css" />
+		
+		<link href="assets/css/datatables.min.css" rel="stylesheet" type="text/css" />
+        <link href="assets/css/plugins/bootstrap/datatables.bootstrap.css" rel="stylesheet" type="text/css" />
         <!-- END PAGE LEVEL PLUGINS -->
         <!-- BEGIN THEME GLOBAL STYLES -->
         <link href="assets/css/components.min.css" rel="stylesheet" id="style_components" type="text/css" />

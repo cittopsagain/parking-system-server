@@ -46,14 +46,22 @@ class ParkingModel extends Database {
         return $result ? TRUE : FALSE;
     }
 
-    public function addViolation($what_parking_area, $plate_num, $violation_type) {
+    public function addViolation($area, $plate_num, $violation_type) {
         $sql = sprintf("INSERT INTO %s (plate_number, violation_type, area, violation_date) VALUES ('%s', '%s', '%s', NOW())",
-                        'violations', $this->db->escapeSpecialChars($plate_num), $this->db->escapeSpecialChars($violation_type), $what_parking_area
-                    );
+                        'violations', $this->db->escapeSpecialChars($plate_num), $this->db->escapeSpecialChars($violation_type), $area);
         $this->db->setSQL($sql);
         $result = $this->db->executeSQLStmt();
         return $result ? TRUE : FALSE;
     }
+	
+	public function updateViolation($id, $plate_num, $violation_type, $area) {
+		$sql = sprintf("UPDATE %s SET plate_number = '%s', violation_type = '%s', area = '%s' WHERE id = %d",
+						'violations', $plate_num, $violation_type, $area, $id
+					);
+		$this->db->setSQL($sql);
+		$result = $this->db->executeSQLStmt();
+        return $result ? TRUE : FALSE;
+	}
 }
 
 ?>

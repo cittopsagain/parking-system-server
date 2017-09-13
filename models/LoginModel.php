@@ -18,11 +18,15 @@ class LoginModel extends Database {
         $this->db->executeSQLStmt();
         $result = $this->db->getQueryResult();
         if (!empty($result)) {
-             $fullname = $result[0]->first_name." ".$result[0]->last_name;
+            $fullname = $result[0]->first_name." ".$result[0]->last_name;
         }
         $data = array("exist" => $this->db->getNumOfRows()->num_rows, "fname" => isset($fullname) ? $fullname : "");
 
         return $data;
+    }
+
+    function redirect($task) {
+        header('Location: ?task='.$task.'');
     }
 }
 

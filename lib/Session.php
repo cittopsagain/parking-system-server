@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * Created by Dave Tolentin on 7/16/2017.
+ */
+
 class Session {
 
     private $session = NULL;
@@ -22,6 +26,10 @@ class Session {
         if (isset($_SESSION[$key])) {
             unset($_SESSION[$key]);
         }
+    }
+
+    public function forget() {
+        session_destroy();
     }
 }
 

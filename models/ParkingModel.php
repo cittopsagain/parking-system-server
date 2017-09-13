@@ -13,8 +13,23 @@
     }
 
     public function getAvailableSlots($area) {
-        $sql = sprintf("SELECT * FROM %s WHERE area = '%s'", 'parking_area', $area); 
+		if ($area != "") {
+			$area = ' AND area = "'.$area.'"';
+		}
+        $sql = sprintf("SELECT * FROM %s WHERE 1 %s", 'parking_area', $area); 
         $this->db->setSQL($sql);
         return $this->db->getQueryResult();
     }
+
+    public function getParkingHistory() {
+        $sql = sprintf("SELECT * FROM %s ORDER BY date_time_park DESC", 'parking_history');
+        $this->db->setSQL($sql);
+        return $this->db->getQueryResult();
+    }
+	
+	public function getViolations() {
+		$sql = sprintf("SELECT * FROM %s ORDER BY violation_date DESC", 'violations');
+        $this->db->setSQL($sql);
+        return $this->db->getQueryResult();
+	}
  }
