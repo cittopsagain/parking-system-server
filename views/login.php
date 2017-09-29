@@ -17,7 +17,8 @@ if ($error) {
     <!-- BEGIN LOGO -->
     <div class="logo">
          <!-- <span class="form-title"> CIT-U PARKING SYSTEM </span> -->
-        <!-- <img src="/cit_parking_system/images/ic_cit_logo1.png" height="100" /> -->
+        <img src="/cit_parking_system/images/ic_logo_small.png" /><br/>
+		<img src="/cit_parking_system/images/ic_logo.png" />
     </div>
     <!-- END LOGO -->
     <!-- BEGIN LOGIN -->

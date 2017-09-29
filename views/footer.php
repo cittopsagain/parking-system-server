@@ -6,6 +6,12 @@
         <script src="assets/js/jquery.blockui.min.js" type="text/javascript"></script>
         <script src="assets/js/bootstrap-switch.min.js" type="text/javascript"></script>
         <!-- END CORE PLUGINS -->
+		
+		<script src="assets/js/bootstrap-table.min.js" type="text/javascript"></script>
+		<script src="assets/js/bootstrap-modalmanager.js" type="text/javascript"></script>
+		<script src="assets/js/bootstrap-modal.js" type="text/javascript"></script>
+		<script src="assets/js/ui-extended-modals.min.js" type="text/javascript"></script>
+		
         <!-- BEGIN PAGE LEVEL PLUGINS -->
         <script src="assets/js/moment.min.js" type="text/javascript"></script>
         <script src="assets/js/daterangepicker.min.js" type="text/javascript"></script>
@@ -25,6 +31,9 @@
         <!-- BEGIN THEME GLOBAL SCRIPTS -->
         <script src="assets/js/app.min.js" type="text/javascript"></script>
         <!-- END THEME GLOBAL SCRIPTS -->
+		
+		<script src="assets/js/table-bootstrap.min.js" type="text/javascript"></script>
+		
         <!-- BEGIN PAGE LEVEL SCRIPTS -->
         <script src="assets/js/dashboard.min.js" type="text/javascript"></script>
         <script src="assets/js/login.min.js" type="text/javascript"></script>

@@ -36,7 +36,8 @@ switch($task) {
     break;
 
     case 'getViolations':
-        $results = $parkingModel->getViolations();
+		$sort_by = $_POST['sortBy'];
+        $results = $parkingModel->getViolations($sort_by);
         echo json_encode($results);
     break;
 
@@ -65,7 +66,9 @@ switch($task) {
         $what_parking_area = $_POST['whatParkingArea'];
         $plate_num = ucfirst($_POST['plateNumber']);
         $violation_type = ucfirst($_POST['violationType']);
-        $result = $parkingModel->addViolation($what_parking_area, $plate_num, $violation_type);
+        $car_model = ucfirst($_POST['carModel']);
+        $car_color = ucfirst($_POST['carColor']);
+        $result = $parkingModel->addViolation($what_parking_area, $plate_num, $violation_type, $car_model, $car_color);
         $response = array("sucess" => $result ? TRUE : FALSE);
         echo json_encode($response);
     break;
@@ -74,8 +77,10 @@ switch($task) {
 		$what_parking_area = $_POST['area'];
         $plate_num = ucfirst($_POST['plateNumber']);
         $violation_type = ucfirst($_POST['violation']);
+        $car_model = ucfirst($_POST['carModel']);
+        $car_color = ucfirst($_POST['carColor']);
         $id = $_POST['id'];
-		$result = $parkingModel->updateViolation($id, $plate_num, $violation_type, $what_parking_area);
+		$result = $parkingModel->updateViolation($id, $plate_num, $violation_type, $what_parking_area, $car_model, $car_color);
         $response = array("sucess" => $result ? TRUE : FALSE);
         echo json_encode($response);
 	break;
@@ -83,6 +88,18 @@ switch($task) {
     case 'connect':
         echo json_encode(array('success' => TRUE));
     break;
+	
+	case 'deleteViolation':
+		$id = $_POST['id'];
+		$result = $parkingModel->deleteViolation($id);
+		$response = array('success' => $result ? TRUE : FALSE);
+	break;
+	
+	case 'resetParkingAreas':
+		$areas_to_reset = $_POST['areas'];
+		$result = $parkingModel->resetParkingAreas($areas_to_reset);
+		echo json_encode($result);
+	break;
 
     default:
     break;

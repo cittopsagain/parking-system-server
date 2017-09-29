@@ -14,6 +14,11 @@
         <link href="assets/css/simple-line-icons.min.css" rel="stylesheet" type="text/css" />
         <link href="assets/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
         <link href="assets/css/bootstrap-switch.min.css" rel="stylesheet" type="text/css" />
+		
+		<link href="assets/css/bootstrap-table.min.css" rel="stylesheet" type="text/css" />
+		<link href="assets/css/bootstrap-modal-bs3patch.css" rel="stylesheet" type="text/css" />
+		<link href="assets/css/bootstrap-modal.css" rel="stylesheet" type="text/css" />
+		
         <!-- END GLOBAL MANDATORY STYLES -->
         <!-- BEGIN PAGE LEVEL PLUGINS -->
         <link href="assets/css/daterangepicker.min.css" rel="stylesheet" type="text/css" />
