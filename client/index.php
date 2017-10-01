@@ -68,7 +68,9 @@ switch($task) {
         $violation_type = ucfirst($_POST['violationType']);
         $car_model = ucfirst($_POST['carModel']);
         $car_color = ucfirst($_POST['carColor']);
-        $result = $parkingModel->addViolation($what_parking_area, $plate_num, $violation_type, $car_model, $car_color);
+		$car_make = ucfirst($_POST['carMake']);
+        $additional_details = ucfirst($_POST['additionalDetails']);
+        $result = $parkingModel->addViolation($what_parking_area, $plate_num, $violation_type, $car_model, $car_color, $car_make, $additional_details);
         $response = array("sucess" => $result ? TRUE : FALSE);
         echo json_encode($response);
     break;
@@ -79,8 +81,10 @@ switch($task) {
         $violation_type = ucfirst($_POST['violation']);
         $car_model = ucfirst($_POST['carModel']);
         $car_color = ucfirst($_POST['carColor']);
+        $car_make = ucfirst($_POST['carMake']);
+        $additional_details = ucfirst($_POST['additionalDetails']);
         $id = $_POST['id'];
-		$result = $parkingModel->updateViolation($id, $plate_num, $violation_type, $what_parking_area, $car_model, $car_color);
+		$result = $parkingModel->updateViolation($id, $plate_num, $violation_type, $what_parking_area, $car_model, $car_color, $car_make, $additional_details);
         $response = array("sucess" => $result ? TRUE : FALSE);
         echo json_encode($response);
 	break;

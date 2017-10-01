@@ -279,22 +279,27 @@
 									</div>
 									<div class="form-group">
 										<label>Plate Number</label>
-										<input type="hidden" id="id" class="form-control">
 										<input type="text" id="pnumber" class="form-control" placeholder="e.g. AB XXXX">
 									</div>
 									<div class="form-group">
-										<label>Car Model</label>
-										<input type="hidden" id="id" class="form-control">
-										<input type="text" id="car_model" class="form-control" placeholder="e.g. Toyota">
+										<label>Make</label>
+										<input type="text" id="car_make" class="form-control" placeholder="e.g. Toyota">
 									</div>
 									<div class="form-group">
-										<label>Car Color</label>
-										<input type="hidden" id="id" class="form-control">
+										<label>Model</label>
+										<input type="text" id="car_model" class="form-control" placeholder="e.g. Fortuner">
+									</div>
+									<div class="form-group">
+										<label>Color</label>
 										<input type="text" id="car_color" class="form-control" placeholder="e.g. Black">
 									</div>
 									<div class="form-group">
 										<label>Violation</label>
 										<input type="text" id="violation" class="form-control" placeholder="e.g. Parked Improperly">
+									</div>
+									<div class="form-group">
+										<label>Additional Details</label>
+										<textarea class="form-control" id="additional_details" rows="2"></textarea>
 									</div>
 								</div>
 								<div class="modal-footer">
@@ -326,17 +331,14 @@
 									</div>
 									<div class="form-group">
 										<label>Make</label>
-										<input type="hidden" id="id" class="form-control">
 										<input type="text" id="a_make" class="form-control" placeholder="e.g. Toyota">
 									</div>
 									<div class="form-group">
 										<label>Model</label>
-										<input type="hidden" id="id" class="form-control">
 										<input type="text" id="a_car_model" class="form-control" placeholder="e.g. Fortuner">
 									</div>
 									<div class="form-group">
-										<label>Car Color</label>
-										<input type="hidden" id="id" class="form-control">
+										<label>Color</label>
 										<input type="text" id="a_car_color" class="form-control" placeholder="e.g. Black">
 									</div>
 									<div class="form-group">

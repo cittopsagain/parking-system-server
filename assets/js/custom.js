@@ -14,9 +14,10 @@ var load = window.onload = function() {
 	
 	document.getElementById('parking-area-canvas').style.display = 'block';
 	// document.getElementById('delete-icon').style.display = 'none';
-	vacantSlotInterval = window.setInterval(function() {
+	getVacantSlots();
+	/* vacantSlotInterval = window.setInterval(function() {
 		// getVacantSlots();
-	}, 2000);
+	}, 2000); */
 	
 	window.setInterval(function() {
 		// Reset at 12AM, so check regularly
@@ -32,9 +33,9 @@ var loaded = false;
 var hsInterval;
 function viewHsArea() {
 	clearInterval(vacantSlotInterval);
-	hsInterval = window.setInterval(function () {
+	/* hsInterval = window.setInterval(function () {
 		loadHSArea('High School Area');
-	}, 2000);
+	}, 2000); */
 	loadHSArea('High School Area');
 }
 
@@ -384,7 +385,7 @@ function updateSpecificParkingAreaSlot() {
 }
 
 function getVacantSlots() {
-	document.getElementById('parking-area-canvas').style.display = 'none';
+	// document.getElementById('parking-area-canvas').style.display = 'none';
 	var formData = new FormData();
     formData.append('area', '');
     var xhr = new XMLHttpRequest();
@@ -410,8 +411,8 @@ function getVacantSlots() {
 }
 
 function getParkingHistory() {
-	clearInterval(vacantSlotInterval);
-	clearInterval(hsInterval);
+	window.clearInterval(vacantSlotInterval);
+	window.clearInterval(hsInterval);
 	document.getElementById('parking-area-canvas').style.display = 'none';
 	document.getElementById('dashboard').innerHTML = "Parking History";
 	document.getElementById('parking-area').style.display = 'block';
@@ -427,15 +428,40 @@ function getParkingHistory() {
         }
     };
     xhr.send();
+	// clearInterval(vacantSlotInterval);
+	// clearInterval(hsInterval);
+}
+
+function searchParkingHistoryHolder() {
+	try {
+		var area = arguments[0]['area'];
+		var date_from = arguments[0]['date_from'];
+		var date_to = arguments[0]['date_to'];
+	} catch(e) {};
+	
+	var html = "<div class='pull-right' style='display: none;' id='delete-icon'>";
+			html += "<a href='javascript:;' id='toogle' class='btn btn-outline dark btn-sm black' onclick='deleteSelectedParkingHistory();'><i class='fa fa-trash-o'></i> Delete </a><br/><br/>";
+		html += "</div>";
+		html += "<div class='pull-left search' id='search-icon'>";
+			html += "<label control-label'>Area:</label>";
+			// html += "<input class='form-control' id='history' onkeyup='search(this, history_tbl, history_tbl_tr);' type='text' placeholder='Search...'>";
+			html += "<input class='form-control' value='"+(typeof area != 'undefined' ? area : '')+"' id='history' type='text'>";
+		// html += "&nbsp;<a href='javascript:void(0);' id='advanced_search_parking_history' onclick='advancedSearchParkingHistory();'>Advanced Search...</a>";
+		html += "<div id='advanced_search_holder' style='display: block;' class='form-group'>";
+			html += "<label control-label'>Date From:</label>";
+			html +=	"<input class='form-control' value='"+(typeof date_from != 'undefined' ? date_from : '')+"' type='date' id='date_from' />";
+			html +=	"<label control-label'>Date To:</label>";
+			html += "<input class='form-control' type='date' value='"+(typeof date_to != 'undefined' ? date_to : '')+"' id='date_to' />";
+			html += "<br/><input type='button' onclick='searchParkingHistory();' class='btn blue btn-sm btn-outline sbold uppercase' value='Filter now' />";
+			html += "&nbsp;<input type='button' id='print' onclick='printHistory();' class='btn purple btn-sm btn-outline sbold uppercase' value='Print' />";
+			html += "</div>";
+		html += "</div>";
+	return html;
 }
 
 function parkingHistoryHTMLTable() {
 	// var table = "<div class='pull-right' style='display: none;' id='delete-icon'><div class='caption'><i class='icon-social-dribbble font-green hide'></i></div><div class='actions'><a class='btn btn-circle btn-icon-only btn-default' onclick='deleteSelectedParkingHistory();' href='javascript:;'><i class='icon-trash'></i></a></div><br/></div>";
-	var table = "<input type='button' id='print' onclick='printHistory();' class='btn purple btn-sm btn-outline sbold uppercase' value='Print' style='float:right;' />";
-	table += "<div class='pull-right' style='display: none;' id='delete-icon'><a href='javascript:;' id='toogle' class='btn btn-outline btn-circle dark btn-sm black' onclick='deleteSelectedParkingHistory();'><i class='fa fa-trash-o'></i> Delete </a><br/><br/></div>";
-	table += "<div class='pull-left search' id='search-icon'><input class='form-control' id='history' onkeyup='search(this, history_tbl, history_tbl_tr);' type='text' placeholder='Search...'>";
-	table += "&nbsp;<a href='javascript:void(0);' id='advanced_search_parking_history' onclick='advancedSearchParkingHistory();'>Advanced Search...</a>";
-	table += "<div id='advanced_search_holder' style='display: none;' class='form-group'><br/><label control-label'>Date From:</label><input class='form-control' type='date' id='date_from' /><label control-label'>Date To:</label><input class='form-control' type='date' id='date_to' /><br/><input type='button' onclick='searchParkingHistory();' class='btn blue' value='Filter now' /></div><br/><br/></div>";
+	var table = searchParkingHistoryHolder(arguments[1]);
 	table += "<table id='history_tbl' class='table table-striped table-bordered table-hover table-checkable order-column'>";
 	table += "<thead>";
 		table += "<tr id='history_tbl_tr'>";
@@ -471,8 +497,9 @@ function searchParkingHistory() {
     xhr.open('POST', '/cit_parking_system/ajax.php?task=searchParkingHistory', true);
     xhr.onload = function () {
         if (xhr.status === 200) {
-			var response = JSON.parse(xhr.responseText); 
-			parkingHistoryHTMLTable(response);
+			var response = JSON.parse(xhr.responseText);
+			var search = {"area" : area, "date_from" : date_from, "date_to" : date_to};
+			parkingHistoryHTMLTable(response, search);
         } else {
             console.log("Error in getting records!");
         }
@@ -507,12 +534,41 @@ function printViolation() {
 	window.open("?task=printViolation&area="+area+"&date_from="+date_from+"&date_to="+date_to, '_blank');
 }
 
+function searchViolationHolder() {
+	try {
+		var area = arguments[0]['area'];
+		var date_from = arguments[0]['date_from'];
+		var date_to = arguments[0]['date_to'];
+	} catch(e) {};
+	
+	var html = "<div class='pull-right' style='display: none;' id='delete-icon'>";
+			html += "<a href='javascript:;' id='toogle' class='btn btn-outline dark btn-sm black' onclick='deleteSelectedParkingHistory();'><i class='fa fa-trash-o'></i> Delete </a><br/><br/>";
+		html += "</div>";
+		html += "<div class='pull-left search' id='search-icon'>";
+			html += "<label control-label'>Area:</label>";
+			html += "<input class='form-control' value='"+(typeof area != 'undefined' ? area : '')+"' id='history' type='text'>";
+			html += "<label control-label'>Violation:</label>";
+			html += "<input class='form-control' value='"+(typeof area != 'undefined' ? area : '')+"' id='history' type='text'>";
+		html += "<div id='advanced_search_holder' style='display: block;' class='form-group'>";
+			html += "<label control-label'>Date From:</label>";
+			html +=	"<input class='form-control' value='"+(typeof date_from != 'undefined' ? date_from : '')+"' type='date' id='date_from' />";
+			html +=	"<label control-label'>Date To:</label>";
+			html += "<input class='form-control' type='date' value='"+(typeof date_to != 'undefined' ? date_to : '')+"' id='date_to' />";
+			html += "<br/><input type='button' onclick='searchParkingHistory();' class='btn blue btn-sm btn-outline sbold uppercase' value='Filter now' />";
+			html += "&nbsp;<input type='button' id='print' onclick='printHistory();' class='btn purple btn-sm btn-outline sbold uppercase' value='Print' />";
+			html += "</div>";
+		html += "</div>";
+	return html;
+}
+
 function getViolations() {
 	var formData = new FormData();
     // formData.append('sort_by', arguments[0]);
 	
-	clearInterval(vacantSlotInterval);
-	clearInterval(hsInterval);
+	/* clearInterval(vacantSlotInterval);
+	clearInterval(hsInterval); */
+	window.clearInterval(vacantSlotInterval);
+	window.clearInterval(hsInterval);
 	document.getElementById('parking-area-canvas').style.display = 'none';
 	document.getElementById('dashboard').innerHTML = "Violations";
 	document.getElementById('parking-area').style.display = 'block';
@@ -523,17 +579,19 @@ function getViolations() {
         if (xhr.status === 200) {
 			var response = JSON.parse(xhr.responseText);
 			// var table = "<div class='pull-right' style='display: none;' id='delete-icon'><div class='caption'><i class='icon-social-dribbble font-green hide'></i></div><div class='actions'><a class='btn btn-circle btn-icon-only btn-default' onclick='deleteSelectedParkingHistory();' href='javascript:;'><i class='icon-trash'></i></a></div><br/></div>";
-			var table = "<div class='pull-right' style='display: none;' id='delete-icon'><a href='javascript:;' id='toogle' class='btn btn-outline btn-circle green btn-sm purple' onclick='editSelectedViolation();'><i class='fa fa-edit'></i> Edit </a>&nbsp;<a href='javascript:;' class='btn btn-outline btn-circle dark btn-sm black' onclick='deleteSelectedViolation();' id='toogle-delete'><i class='fa fa-trash-o'></i> Delete </a><br/><br/></div>";
+			var table = "<div class='pull-right' style='display: none;' id='delete-icon'><a href='javascript:;' id='toogle' class='btn btn-outline green btn-sm purple' onclick='editSelectedViolation();'><i class='fa fa-edit'></i> Edit </a>&nbsp;<a href='javascript:;' class='btn btn-outline dark btn-sm black' onclick='deleteSelectedViolation();' id='toogle-delete'><i class='fa fa-trash-o'></i> Delete </a><br/><br/></div>";
 			table += "<a href='javascript:;' data-target='#stack2' data-toggle='modal' class='btn dark btn-sm btn-outline sbold uppercase'><i class='fa fa-plus'></i> Add Violation </a>&nbsp;<input type='button' id='print' onclick='printHistory();' class='btn purple btn-sm btn-outline sbold uppercase' value='Print' /><br/><br/><div class='pull-right' id='search-icon'><input class='form-control' id='history' onkeyup='search(this, violation_tbl, violation_tbl_tr);' type='text' placeholder='Search...'><br/></div>";
 			table += "<table id='violation_tbl' class='table table-striped table-bordered table-hover table-checkable order-column' id='sample_1'>";
 			table += "<thead>";
 				table += "<tr id='violation_tbl_tr'>";
 					table += "<th><label class='mt-checkbox mt-checkbox-single mt-checkbox-outline'><input name='btSelectAll' id='selectAll' onclick='toogleAllCheckbox(this);' type='checkbox'><span></span></label></th>";
 					table += "<th onclick='sortTable(1)' width='200'>Area</th>";
-					table += "<th>Plate Number</th>";
-					table += "<th>Car Model</th>";
-					table += "<th>Car Color</th>";
+					table += "<th>Plate Num.</th>";
+					table += "<th>Make</th>";
+					table += "<th>Model</th>";
+					table += "<th>Color</th>";
 					table += "<th onclick='sortTable(1)'>Violation</th>";
+					table += "<th>Additional Details</th>";
 					table += "<th>Date Time Violation</th>";
 				table += "</tr>";
 			table += "</thead>";
@@ -543,9 +601,11 @@ function getViolations() {
 					table += "<td><input type='hidden' id='key_"+i+"' value='"+response[i]['id']+"'/><label class='mt-checkbox mt-checkbox-single mt-checkbox-outline'><input data-index='0' name='checkbox' value='"+response[i]['id']+"' onclick='hideUnhideDeleteIcon(this);' type='checkbox'><span></span></label></td>";
 					table += "<td>"+response[i]['area']+"</td>";
 					table += "<td>"+response[i]['plate_number']+"</td>";
+					table += "<td>"+response[i]['car_make']+"</td>";
 					table += "<td>"+response[i]['car_model']+"</td>";
 					table += "<td>"+response[i]['car_color']+"</td>";
 					table += "<td>"+response[i]['violation_type']+"</td>";
+					table += "<td>"+response[i]['additional_details']+"</td>";
 					table += "<td>"+response[i]['violation_date']+"</td>";
 				table += "</tr>";
             }
@@ -730,8 +790,10 @@ function addViolation() {
 	var area = document.getElementById("a_area").value;
 	var pnumber = document.getElementById("a_pnumber").value;
 	var violation = document.getElementById("a_violation").value;
+	var car_make = document.getElementById("a_make").value;
 	var car_model = document.getElementById("a_car_model").value;
 	var car_color = document.getElementById("a_car_color").value;
+	var additional_details = document.getElementById("a_additional_details").value;
 	
 	var formData = new FormData();
 	formData.append('area', area);
@@ -739,6 +801,8 @@ function addViolation() {
 	formData.append('violation', violation);
 	formData.append('car_model', car_model);
 	formData.append('car_color', car_color);
+	formData.append('car_make', car_make);
+	formData.append('additional_details', additional_details);
 	var xhr = new XMLHttpRequest();
     xhr.open('POST', '/cit_parking_system/ajax.php?task=addViolation', true);
     xhr.onload = function () {
@@ -751,6 +815,8 @@ function addViolation() {
 				document.getElementById("a_violation").value = "";
 				document.getElementById("a_car_model").value = "";
 				document.getElementById("a_car_color").value = "";
+				document.getElementById("a_make").value = "";
+				document.getElementById("a_additional_details").value = "";
 				document.getElementById("a_area").selectedIndex = 0;
 			}
 		}
@@ -816,9 +882,11 @@ function editSelectedViolation() {
 	document.getElementById("id").value = args;
 	document.getElementById("area").value = data[0];
 	document.getElementById("pnumber").value = data[1];
-	document.getElementById("car_model").value = data[2];
-	document.getElementById("car_color").value = data[3];
-	document.getElementById("violation").value = data[4];
+	document.getElementById("car_model").value = data[3];
+	document.getElementById("car_color").value = data[4];
+	document.getElementById("violation").value = data[5];
+	document.getElementById("additional_details").value = data[6];
+	document.getElementById("car_make").value = data[2];
 }
 
 function editSelected() {
@@ -827,8 +895,9 @@ function editSelected() {
 	var violation = document.getElementById("violation").value;
 	var car_model = document.getElementById("car_model").value;
 	var car_color = document.getElementById("car_color").value;
+	var car_make = document.getElementById("car_make").value;
+	var additional_details = document.getElementById("additional_details").value;
 	var id = document.getElementById("id").value;
-	
 	var formData = new FormData();
 	formData.append('id', id);
 	formData.append('area', area);
@@ -836,11 +905,14 @@ function editSelected() {
 	formData.append('violation', violation);
 	formData.append('car_model', car_model);
 	formData.append('car_color', car_color);
+	formData.append('car_make', car_make);
+	formData.append('additional_details', additional_details);
 	var xhr = new XMLHttpRequest();
     xhr.open('POST', '/cit_parking_system/ajax.php?task=editViolation', true);
     xhr.onload = function () {
 		if (xhr.status === 200) {
 			var response = JSON.parse(xhr.responseText);
+			console.log(response);
 			if (response.success) {
 				getViolations();
 			}

@@ -30,8 +30,10 @@ if ($task == 'history') {
 	$violation = ucfirst($_POST['violation']);
 	$car_model = ucfirst($_POST['car_model']);
 	$car_color = ucfirst($_POST['car_color']);
+	$car_make = ucfirst($_POST['car_make']);
+	$additional_details = ucfirst($_POST['additional_details']);
 	
-	$result = $parkingModel->updateSelectedParkingArea($area, $pnumber, $violation, $id, $car_model, $car_color);
+	$result = $parkingModel->updateSelectedParkingArea($area, $pnumber, $violation, $id, $car_model, $car_color, $car_make, $additional_details);
 	echo json_encode(array('success' => $result ? TRUE : FALSE));
 } else if ($task == 'updateSpecificParkingAreaSlot') {
 	$area = $_POST['area'];
@@ -47,8 +49,10 @@ if ($task == 'history') {
 	$violation = ucfirst($_POST['violation']);
 	$car_model = ucfirst($_POST['car_model']);
 	$car_color = ucfirst($_POST['car_color']);
+	$car_make = ucfirst($_POST['car_make']);
+	$additional_details = ucfirst($_POST['additional_details']);
 	
-	$result = $parkingModel->addViolation($area, $pnumber, $violation, $car_model, $car_color);
+	$result = $parkingModel->addViolation($area, $pnumber, $violation, $car_model, $car_color, $car_make, $additional_details);
 	echo json_encode(array('success' => $result ? TRUE : FALSE));
 } else if ($task == 'resetAt12AM') {
 	$result = $parkingModel->resetParkingArea12AM();

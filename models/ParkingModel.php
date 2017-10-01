@@ -66,14 +66,16 @@
 		return $success;
 	}
 	
-	public function updateSelectedParkingArea($area, $pnumber, $violation, $id, $car_model, $car_color) {
-		$sql = sprintf("UPDATE %s SET plate_number = '%s', violation_type = '%s', car_model = '%s', car_color = '%s', area = '%s' WHERE id = %d", 
+	public function updateSelectedParkingArea($area, $pnumber, $violation, $id, $car_model, $car_color, $car_make, $additional_details) {
+		$sql = sprintf("UPDATE %s SET plate_number = '%s', violation_type = '%s', car_model = '%s', car_color = '%s', area = '%s', car_make = '%s', additional_details = '%s' WHERE id = %d", 
 						'violations', 
 						$this->db->escapeSpecialChars($pnumber), 
 						$this->db->escapeSpecialChars($violation), 
 						$this->db->escapeSpecialChars($car_model), 
 						$this->db->escapeSpecialChars($car_color), 
 						$area, 
+						$this->db->escapeSpecialChars($car_make), 
+						$this->db->escapeSpecialChars($additional_details),
 						$id
 					);
 		$this->db->setSQL($sql);
@@ -97,14 +99,16 @@
 		return $success;
 	}
 	
-	public function addViolation($area, $pnumber, $violation, $car_model, $car_color) {
-		$sql = sprintf("INSERT INTO %s (plate_number, violation_type, car_model, car_color, area, violation_date) VALUES ('%s', '%s', '%s', '%s', '%s', NOW())",
+	public function addViolation($area, $pnumber, $violation, $car_model, $car_color, $car_make, $additional_details) {
+		$sql = sprintf("INSERT INTO %s (plate_number, violation_type, car_model, car_color, area, additional_details, car_make, violation_date) VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s', NOW())",
                         'violations', 
 						$this->db->escapeSpecialChars($pnumber),
 						$this->db->escapeSpecialChars($violation), 
 						$this->db->escapeSpecialChars($car_model), 
 						$this->db->escapeSpecialChars($car_color), 
-						$area
+						$area,
+						$this->db->escapeSpecialChars($additional_details), 
+						$this->db->escapeSpecialChars($car_make)
 					);
         $this->db->setSQL($sql);
         $result = $this->db->executeSQLStmt();
