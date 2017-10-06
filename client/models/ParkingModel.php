@@ -110,7 +110,7 @@ class ParkingModel extends Database {
 			$slots = $result[0]->available_slots;
 			$slots_arr = explode(",", $slots);
 			// Do not reset if all slots are vacant
-			if (count($slots_arr) == 61) {
+			if (count($slots_arr) == 54) {
 				return array('reset' => FALSE, 'vacant_all' => TRUE);
 				exit;
 			}
@@ -125,7 +125,7 @@ class ParkingModel extends Database {
 				// For now set the max limit to 61
 				// 61 is the maximum limit of the Highschool area
 				$all_slots_array = array();
-				for ($j = 1; $j < 62; $j++) {
+				for ($j = 1; $j < 55; $j++) {
 					$all_slots_array[$j] = $j;
 				}
 				$slots_to_force_unpark = array_merge(array_diff($available_array, $all_slots_array), array_diff($all_slots_array, $available_array));
@@ -146,7 +146,7 @@ class ParkingModel extends Database {
 				// Occupied all, so free all the unparked
 				$success = TRUE;
 				$all_slots_array = array();
-				for ($j = 1; $j < 62; $j++) {
+				for ($j = 1; $j < 55; $j++) {
 					$all_slots_array[$j] = $j;
 					$result = $this->addToParkingHistory($area, $all_slots_array[$j]);
 					if (!$result) {

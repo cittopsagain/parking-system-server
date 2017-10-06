@@ -182,7 +182,7 @@ function loadHSArea() {
 				
 				var currentLeftX = 300;
                 var currentLeftY = 564;
-				for (var i = 25; i <= 38; i++) {
+				for (var i = 25; i <= 35; i++) {
                     var found = false;
                     ctx.fillStyle = occupied;
                     for (var j = 0; j < availableSlots.length; j++) {
@@ -200,14 +200,14 @@ function loadHSArea() {
 					
                     ctx.beginPath();
                     ctx.arc(currentLeftX, currentLeftY, 5, 0, Math.PI * 2, true);
-                    currentLeftX += 18;
-                    currentLeftY -= 5;
+                    currentLeftX += 22;
+                    currentLeftY -= 7;
                     ctx.fill();
                 }
 				
 				var currentBelowLeftX = 326;
                 var currentBelowLeftY = 658;
-				for (var i = 39; i <= 52; i++) {
+				for (var i = 36; i <= 46; i++) {
                     var found = false;
                     ctx.fillStyle = occupied;
                     for (var j = 0; j < availableSlots.length; j++) {
@@ -225,14 +225,14 @@ function loadHSArea() {
 					
                     ctx.beginPath();
                     ctx.arc(currentBelowLeftX, currentBelowLeftY, 5, 0, Math.PI * 2, true);
-                    currentBelowLeftX += 18;
-                    currentBelowLeftY -= 5.4;
+                    currentBelowLeftX += 22;
+                    currentBelowLeftY -= 7;
                     ctx.fill();
                 }
 				
 				var currentRightX = 580;
                 var currentRightY = 300;
-				for (var i = 53; i <= 61; i++) {
+				for (var i = 47; i <= 54; i++) {
                     var found = false;
                     ctx.fillStyle = occupied;
                     for (var j = 0; j < availableSlots.length; j++) {
@@ -256,16 +256,16 @@ function loadHSArea() {
 					if (ctr  == 0) {
 						document.getElementById('high_school_badge').classList.remove("badge", "badge-success");
 						document.getElementById('high_school_badge').classList.add("badge", "badge-danger");
-						document.getElementById('high_school_badge').textContent = "0";
+						document.getElementById('high_school_badge').textContent = "0/54";
 					} else {
 						document.getElementById('high_school_badge').classList.remove("badge", "badge-danger");
 						document.getElementById('high_school_badge').classList.add("badge", "badge-success");
-						document.getElementById('high_school_badge').textContent = ctr +"/61";
+						document.getElementById('high_school_badge').textContent = ctr +"/54";
 						// document.getElementById('high_school_badge_board').textContent = ctr;
 					}
                 }
             };
-            image.src = '/cit_parking_system/images/map/ic_academic_area_2d.png';
+            image.src = '/cit_parking_system/images/map/ic_hs_area.png';
         } else {
             alert('An error occurred!');
         }
@@ -400,8 +400,8 @@ function getVacantSlots() {
 				document.getElementById('high_school_badge').classList.add("badge", "badge-danger");
 				document.getElementById('high_school_badge').textContent = "0";
 			} else {
-				document.getElementById('high_school_badge').textContent = highSchoolArea.length +"/61";
-				document.getElementById('high_school_badge_board').textContent = highSchoolArea.length + "/61";
+				document.getElementById('high_school_badge').textContent = highSchoolArea.length +"/54";
+				document.getElementById('high_school_badge_board').textContent = highSchoolArea.length + "/54";
 			}
         } else {
             alert('An error occurred!');

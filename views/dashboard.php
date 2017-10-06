@@ -182,7 +182,7 @@
                                     </div>
                                     <div class="details">
                                         <div class="number">
-                                            <span id="high_school_badge_board" data-counter="counterup" data-value="1349">0</span>
+                                            <span id="high_school_badge_board" data-counter="counterup" data-value="1349">0/54</span>
                                         </div>
                                         <div class="desc"> High School Area </div>
                                     </div>
