@@ -64,5 +64,13 @@ if ($task == 'history') {
 	
 	$results = $parkingModel->searchParkingHistory(array("area" => $area, "date_from" => $date_from, "date_to" => $date_to));
 	echo json_encode($results);
+} else if ($task == 'searchViolation') {
+	$area = $_POST['area'];
+	$violation = $_POST['violation'];
+	$date_from = $_POST['date_from'];
+	$date_to = $_POST['date_to'];
+	
+	$results = $parkingModel->searchViolation(array("area" => $area, "date_from" => $date_from, "date_to" => $date_to, "violation" => $violation));
+	echo json_encode($results);
 }
 ?>

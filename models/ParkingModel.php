@@ -153,5 +153,32 @@
 		return $this->db->getQueryResult();
 	}
 	
-	
+	public function searchViolation($data) {
+		$date_from = date('Y-m-d', strtotime(str_replace('-', '/', $data['date_from'])));
+		$date_to = date('Y-m-d', strtotime(str_replace('-', '/', $data['date_to'])));
+		$filter = "";
+		if (!empty($data['area'])) {
+			$filter .= " AND area LIKE '%".$this->db->escapeSpecialChars($data['area'])."%'";
+		}
+		
+		if (!empty($data['date_from']) && empty($data['date_to'])) {
+			$filter .= " AND violation_date >= '".$date_from."'";
+		}
+		
+		if (empty($data['date_from']) && !empty($data['date_to'])) {
+			$filter .= " AND violation_date <= '".$date_to."'";
+		}
+		
+		if (!empty($data['date_from']) && !empty($data['date_to'])) {
+			$filter .= " AND violation_date BETWEEN '".$date_from."' AND '".$date_to."'";
+		}
+		
+		if (!empty($data['violation'])) {
+			$filter .= " AND violation_type LIKE '%".$this->db->escapeSpecialChars($data['violation'])."%'";
+		}
+		
+		$sql = sprintf("SELECT * FROM %s WHERE 1 %s", 'violations', $filter);
+		$this->db->setSQL($sql);
+		return $this->db->getQueryResult();
+	}
  }

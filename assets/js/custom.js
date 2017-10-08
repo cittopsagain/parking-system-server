@@ -1,8 +1,9 @@
 /*
- *@author: Dave Tolentin
+ *@author: Walter Ybanez
  */
 
 var vacantSlotInterval;
+// When page loads, execute whats inside the function
 var load = window.onload = function() {
     document.getElementById('parking-area').style.display = 'block';
 	document.getElementById('parking-area-holder-canvas').style.display = 'none';
@@ -11,14 +12,12 @@ var load = window.onload = function() {
 	document.getElementById('st_bldg_badge').style.visibility = 'hidden';
 	document.getElementById('backgate_badge').style.visibility = 'hidden';
 	document.getElementById('canteen_badge').style.visibility = 'hidden';
-	
 	document.getElementById('parking-area-canvas').style.display = 'block';
 	// document.getElementById('delete-icon').style.display = 'none';
 	getVacantSlots();
 	/* vacantSlotInterval = window.setInterval(function() {
 		// getVacantSlots();
 	}, 2000); */
-	
 	window.setInterval(function() {
 		// Reset at 12AM, so check regularly
 		resetAt12AM();
@@ -507,6 +506,31 @@ function searchParkingHistory() {
     xhr.send(formData);
 }
 
+function searchViolation() {
+	var formData = new FormData();
+	var area = document.getElementById('v_area').value;
+	var violation_type = document.getElementById('v_violation_type').value;
+	var date_from = document.getElementById('v_date_from').value;
+	var date_to = document.getElementById('v_date_to').value;
+	formData.append('area', area);
+	formData.append('violation', violation_type);
+	formData.append('date_from', date_from);
+	formData.append('date_to', date_to);
+	var xhr = new XMLHttpRequest();
+    xhr.open('POST', '/cit_parking_system/ajax.php?task=searchViolation', true);
+    xhr.onload = function () {
+        if (xhr.status === 200) {
+			var response = JSON.parse(xhr.responseText);
+			console.log(response);
+			var search = {"area" : area, "date_from" : date_from, "date_to" : date_to, 'violation' : violation_type};
+			violationHTMLTable(response, search);
+        } else {
+            console.log("Error in getting records!");
+        }
+    };
+    xhr.send(formData);
+}
+
 function advancedSearchParkingHistory() {
 	var link_advanced_search = document.getElementById('advanced_search_parking_history');
 	if (link_advanced_search.innerHTML == 'Advanced Search...') {
@@ -527,37 +551,56 @@ function printHistory() {
 }
 
 function printViolation() {
-	var area = document.getElementById('history').value;
-	var date_from = document.getElementById('date_from').value;
-	var date_to = document.getElementById('date_to').value;
+	var area = document.getElementById('v_area').value;
+	var violation = document.getElementById('v_violation_type').value;
+	var date_from = document.getElementById('v_date_from').value;
+	var date_to = document.getElementById('v_date_to').value;
 	
-	window.open("?task=printViolation&area="+area+"&date_from="+date_from+"&date_to="+date_to, '_blank');
+	window.open("?task=printViolation&area="+area+"&date_from="+date_from+"&date_to="+date_to+"&violation="+violation, '_blank');
 }
 
 function searchViolationHolder() {
 	try {
 		var area = arguments[0]['area'];
+		var violation = arguments[0]['violation'];
 		var date_from = arguments[0]['date_from'];
 		var date_to = arguments[0]['date_to'];
 	} catch(e) {};
-	
-	var html = "<div class='pull-right' style='display: none;' id='delete-icon'>";
-			html += "<a href='javascript:;' id='toogle' class='btn btn-outline dark btn-sm black' onclick='deleteSelectedParkingHistory();'><i class='fa fa-trash-o'></i> Delete </a><br/><br/>";
-		html += "</div>";
-		html += "<div class='pull-left search' id='search-icon'>";
-			html += "<label control-label'>Area:</label>";
-			html += "<input class='form-control' value='"+(typeof area != 'undefined' ? area : '')+"' id='history' type='text'>";
-			html += "<label control-label'>Violation:</label>";
-			html += "<input class='form-control' value='"+(typeof area != 'undefined' ? area : '')+"' id='history' type='text'>";
-		html += "<div id='advanced_search_holder' style='display: block;' class='form-group'>";
-			html += "<label control-label'>Date From:</label>";
-			html +=	"<input class='form-control' value='"+(typeof date_from != 'undefined' ? date_from : '')+"' type='date' id='date_from' />";
-			html +=	"<label control-label'>Date To:</label>";
-			html += "<input class='form-control' type='date' value='"+(typeof date_to != 'undefined' ? date_to : '')+"' id='date_to' />";
-			html += "<br/><input type='button' onclick='searchParkingHistory();' class='btn blue btn-sm btn-outline sbold uppercase' value='Filter now' />";
-			html += "&nbsp;<input type='button' id='print' onclick='printHistory();' class='btn purple btn-sm btn-outline sbold uppercase' value='Print' />";
+	var html = "<a href='javascript:;' data-target='#stack2' data-toggle='modal' class='btn dark btn-sm btn-outline sbold uppercase pull-right'>";
+					html += "<i class='fa fa-plus'></i> Add";
+				html +="</a>&nbsp";
+			html += "<div class='pull-right' style='display: none;' id='delete-icon'>";
+			html += "<a href='javascript:;' id='toogle' class='btn btn-outline green btn-sm purple' onclick='editSelectedViolation();'>";
+					html += "<i class='fa fa-edit'></i> Edit";
+				html +="</a>&nbsp";
+				html += "<a href='javascript:;' class='btn btn-outline dark btn-sm black' onclick='deleteSelectedViolation();' id='toogle-delete'>";
+					html += "<i class='fa fa-trash-o'></i> Delete</a>&nbsp;<br/><br/>";
 			html += "</div>";
-		html += "</div>";
+			/* html += "<a href='javascript:;' data-target='#stack2' data-toggle='modal' class='btn dark btn-sm btn-outline sbold uppercase'>";
+				html += "<i class='fa fa-plus'></i> Add Violation"; */
+			html += "</a>&nbsp;";
+			html += "<div class='pull-left' id='search-icon'>";
+				// html += "<input class='form-control' id='history' onkeyup='search(this, violation_tbl, violation_tbl_tr);' type='text' placeholder='Search...'><br/>";
+				// html += "<input class='form-control' id='history' type='text' placeholder='Search...'><br/>";
+				
+				// html += "<input type='button' id='print' onclick='printViolation();' class='btn purple btn-sm btn-outline sbold uppercase' value='Print' /><br/><br/>";
+				html += "<label control-label'>Area:</label>";
+				html += "<input class='form-control' value='"+(typeof area != 'undefined' ? area : '')+"' id='v_area' type='text'>";
+				
+				html += "<label control-label'>Violation Type:</label>";
+				html += "<input class='form-control' value='"+(typeof violation != 'undefined' ? violation : '')+"' id='v_violation_type' type='text'>";
+				
+				html += "<div class='form-group'>";
+				html += "<label control-label'>Date From:</label>";
+				html +=	"<input class='form-control' value='"+(typeof date_from != 'undefined' ? date_from : '')+"' type='date' id='v_date_from' />";
+				html +=	"<label control-label'>Date To:</label>";
+				html += "<input class='form-control' type='date' value='"+(typeof date_to != 'undefined' ? date_to : '')+"' id='v_date_to' />";
+				html += "<br/><input type='button' onclick='searchViolation();' class='btn blue btn-sm btn-outline sbold uppercase' value='Filter now' />";
+				html += "&nbsp;<input type='button' id='print' onclick='printViolation();' class='btn purple btn-sm btn-outline sbold uppercase' value='Print' />";
+				html += "</div>";
+			html += "</div>";
+			html += "<table id='violation_tbl' class='table table-striped table-bordered table-hover table-checkable order-column' id='sample_1'>";
+	
 	return html;
 }
 
@@ -578,40 +621,7 @@ function getViolations() {
     xhr.onload = function () {
         if (xhr.status === 200) {
 			var response = JSON.parse(xhr.responseText);
-			// var table = "<div class='pull-right' style='display: none;' id='delete-icon'><div class='caption'><i class='icon-social-dribbble font-green hide'></i></div><div class='actions'><a class='btn btn-circle btn-icon-only btn-default' onclick='deleteSelectedParkingHistory();' href='javascript:;'><i class='icon-trash'></i></a></div><br/></div>";
-			var table = "<div class='pull-right' style='display: none;' id='delete-icon'><a href='javascript:;' id='toogle' class='btn btn-outline green btn-sm purple' onclick='editSelectedViolation();'><i class='fa fa-edit'></i> Edit </a>&nbsp;<a href='javascript:;' class='btn btn-outline dark btn-sm black' onclick='deleteSelectedViolation();' id='toogle-delete'><i class='fa fa-trash-o'></i> Delete </a><br/><br/></div>";
-			table += "<a href='javascript:;' data-target='#stack2' data-toggle='modal' class='btn dark btn-sm btn-outline sbold uppercase'><i class='fa fa-plus'></i> Add Violation </a>&nbsp;<input type='button' id='print' onclick='printHistory();' class='btn purple btn-sm btn-outline sbold uppercase' value='Print' /><br/><br/><div class='pull-right' id='search-icon'><input class='form-control' id='history' onkeyup='search(this, violation_tbl, violation_tbl_tr);' type='text' placeholder='Search...'><br/></div>";
-			table += "<table id='violation_tbl' class='table table-striped table-bordered table-hover table-checkable order-column' id='sample_1'>";
-			table += "<thead>";
-				table += "<tr id='violation_tbl_tr'>";
-					table += "<th><label class='mt-checkbox mt-checkbox-single mt-checkbox-outline'><input name='btSelectAll' id='selectAll' onclick='toogleAllCheckbox(this);' type='checkbox'><span></span></label></th>";
-					table += "<th onclick='sortTable(1)' width='200'>Area</th>";
-					table += "<th>Plate Num.</th>";
-					table += "<th>Make</th>";
-					table += "<th>Model</th>";
-					table += "<th>Color</th>";
-					table += "<th onclick='sortTable(1)'>Violation</th>";
-					table += "<th>Additional Details</th>";
-					table += "<th>Date Time Violation</th>";
-				table += "</tr>";
-			table += "</thead>";
-			table += "<tbody>";
-            for (var i = 0; i < response.length; i++) {
-                table += "<tr class='odd gradeX'>";
-					table += "<td><input type='hidden' id='key_"+i+"' value='"+response[i]['id']+"'/><label class='mt-checkbox mt-checkbox-single mt-checkbox-outline'><input data-index='0' name='checkbox' value='"+response[i]['id']+"' onclick='hideUnhideDeleteIcon(this);' type='checkbox'><span></span></label></td>";
-					table += "<td>"+response[i]['area']+"</td>";
-					table += "<td>"+response[i]['plate_number']+"</td>";
-					table += "<td>"+response[i]['car_make']+"</td>";
-					table += "<td>"+response[i]['car_model']+"</td>";
-					table += "<td>"+response[i]['car_color']+"</td>";
-					table += "<td>"+response[i]['violation_type']+"</td>";
-					table += "<td>"+response[i]['additional_details']+"</td>";
-					table += "<td>"+response[i]['violation_date']+"</td>";
-				table += "</tr>";
-            }
-			table += "</tbody>";
-			table += "</table>";
-			document.getElementById('parking-area').innerHTML = table;			
+			violationHTMLTable(response);		
         } else {
             console.log("Error in getting records!");
         }
@@ -622,6 +632,41 @@ function getViolations() {
 			document.getElementById('sort_by_area').checked = true;
 		}
 	}
+}
+
+function violationHTMLTable() {
+	// var table = "<div class='pull-right' style='display: none;' id='delete-icon'><div class='caption'><i class='icon-social-dribbble font-green hide'></i></div><div class='actions'><a class='btn btn-circle btn-icon-only btn-default' onclick='deleteSelectedParkingHistory();' href='javascript:;'><i class='icon-trash'></i></a></div><br/></div>";
+	var table = searchViolationHolder(arguments[1]);
+	table += "<thead>";
+		table += "<tr id='violation_tbl_tr'>";
+			table += "<th><label class='mt-checkbox mt-checkbox-single mt-checkbox-outline'><input name='btSelectAll' id='selectAll' onclick='toogleAllCheckbox(this);' type='checkbox'><span></span></label></th>";
+			table += "<th onclick='sortTable(1)' width='200'>Area</th>";
+			table += "<th>Plate Num.</th>";
+			table += "<th>Make</th>";
+			table += "<th>Model</th>";
+			table += "<th>Color</th>";
+			table += "<th onclick='sortTable(1)'>Violation</th>";
+			table += "<th>Additional Details</th>";
+			table += "<th>Date Time Violation</th>";
+		table += "</tr>";
+	table += "</thead>";
+	table += "<tbody>";
+	for (var i = 0; i < arguments[0].length; i++) {
+		table += "<tr class='odd gradeX'>";
+			table += "<td><input type='hidden' id='key_"+i+"' value='"+arguments[0][i]['id']+"'/><label class='mt-checkbox mt-checkbox-single mt-checkbox-outline'><input data-index='0' name='checkbox' value='"+arguments[0][i]['id']+"' onclick='hideUnhideDeleteIcon(this);' type='checkbox'><span></span></label></td>";
+			table += "<td>"+arguments[0][i]['area']+"</td>";
+			table += "<td>"+arguments[0][i]['plate_number']+"</td>";
+			table += "<td>"+arguments[0][i]['car_make']+"</td>";
+			table += "<td>"+arguments[0][i]['car_model']+"</td>";
+			table += "<td>"+arguments[0][i]['car_color']+"</td>";
+			table += "<td>"+arguments[0][i]['violation_type']+"</td>";
+			table += "<td>"+arguments[0][i]['additional_details']+"</td>";
+			table += "<td>"+arguments[0][i]['violation_date']+"</td>";
+		table += "</tr>";
+	}
+	table += "</tbody>";
+	table += "</table>";
+	document.getElementById('parking-area').innerHTML = table;	
 }
 
 function sortTable(n) {
