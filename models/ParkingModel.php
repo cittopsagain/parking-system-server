@@ -122,11 +122,20 @@
 		$midnight = date_create(date('Y-m-d H:i:s', strtotime('today midnight')));
 		$interval = date_diff($current_date, $midnight);
 		if ($interval->invert == 1 && $interval->h <= 1) {
-			$sql = sprintf("UPDATE %s SET available_slots = '' WHERE area = 'High School Area'", 'parking_area');
+			$sql = sprintf("UPDATE %s SET available_slots = '%s' WHERE area = 'High School Area'", 'parking_area', $this->slots());
 			$this->db->setSQL($sql);
 			$result = $this->db->executeSQLStmt();
 			return $result ? TRUE : FALSE;
 		}
+	}
+	
+	private function slots() {
+		$all_slots_array = array();
+		for ($j = 1; $j < 55; $j++) {
+			$all_slots_array[$j] = $j;
+		}
+		
+		return implode(',', $all_slots_array);
 	}
 	
 	public function searchParkingHistory($data) {
